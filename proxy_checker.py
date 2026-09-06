@@ -33,10 +33,11 @@ def check_proxy(proxy):
                 if proxy not in working:
                     working.add(proxy)
                     proxy_queue.put(proxy)
-                    print(f"WORKING {proxy}")
+                    #print(f"WORKING {proxy}")
 
     except Exception as e:
-        print(f"DEAD {proxy}: {type(e).__name__}: {e}")
+        #print(f"DEAD {proxy}: {type(e).__name__}: {e}")
+        pass
 
 
 def proxy_checker():
@@ -82,6 +83,15 @@ def display_loop():
         save_proxies()
 
         time.sleep(1)
+
+def remove_proxy(p):
+    working.remove(p)
+
+def get_proxy():
+    with lock:
+        t = tuple(working)
+        if not t: return None
+        return random.choice(t)
 
 def start_thread():
     t = threading.Thread(target=proxy_checker, daemon=True)
