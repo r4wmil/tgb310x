@@ -15,7 +15,6 @@ working = set()
 proxy_queue = queue.Queue()
 lock = threading.Lock()
 
-
 def check_proxy(proxy):
     proxy = proxy.strip()
     if not proxy:
@@ -84,12 +83,6 @@ def display_loop():
 
         time.sleep(1)
 
-
-if __name__ == "__main__":
-    load_proxies()
-    threading.Thread(
-        target=proxy_checker,
-        daemon=True
-    ).start()
-
-    display_loop()
+def start_thread():
+    t = threading.Thread(target=proxy_checker, daemon=True)
+    t.start()
