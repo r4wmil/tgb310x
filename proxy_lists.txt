@@ -1,0 +1,1 @@
+https://github.com/proxifly/free-proxy-list/raw/refs/heads/main/proxies/all/data.txt
