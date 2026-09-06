@@ -1,3 +1,4 @@
+import os.path
 import random
 import queue
 import threading
@@ -54,6 +55,21 @@ def proxy_checker():
         # Re-check periodically
         time.sleep(30)
 
+def save_proxies():
+    f = open("proxies_cache.txt", "w", encoding="utf-8")
+    with lock:
+        f.write("\n".join(working))
+    f.close()
+
+def load_proxies():
+    if not os.path.exists("proxies_cache.txt"):
+        return
+    f = open("proxies_cache.txt", encoding="utf-8")
+    with lock:
+        working.update([l.strip() for l in f if l.strip()])
+        for p in f.readlines():
+            proxy_queue.put(p)
+    f.close()
 
 def display_loop():
     while True:
@@ -63,11 +79,14 @@ def display_loop():
         print(f"\n--- Working proxies: {len(current)} ---")
         for proxy in current:
             print(proxy)
+    
+        save_proxies()
 
         time.sleep(1)
 
 
 if __name__ == "__main__":
+    load_proxies()
     threading.Thread(
         target=proxy_checker,
         daemon=True
